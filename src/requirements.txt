@@ -1,0 +1,25 @@
+bidict==0.21.2
+certifi==2020.12.5
+chardet==4.0.0
+click==7.1.2
+colorama==0.4.4
+colorlog==4.7.2
+Flask==1.1.2
+Flask-SocketIO==4.3.1
+# frida==14.0.8
+# frida-tools==9.0.0
+frida==15.1.1
+frida-tools==10.2.2
+idna==2.10
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+prompt-toolkit==3.0.8
+Pygments==2.7.4
+python-engineio==3.13.2
+python-socketio==4.6.0
+requests==2.25.1
+six==1.15.0
+urllib3==1.26.3
+wcwidth==0.2.5
+Werkzeug==1.0.1

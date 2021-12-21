@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="HTTPDecryptPlugin:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HTTPDecryptPlugin_jar</output-path>
+    <root id="archive" name="HTTPDecryptPlugin.jar">
+      <element id="module-output" name="HTTPDecryptPlugin" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
