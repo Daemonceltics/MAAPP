@@ -3,10 +3,10 @@
 MAAPP is an Android/iOS App API penetration tool. Using its penetration tester can improve efficiency because it ignores kinds of protection functions (e.g. encrypt) implemention. Powered by [frida.re](https://www.frida.re), [python3](https://www.python.org)
 Base on https://github.com/lyxhh/lxhToolHTTPDecrypt/, thanks @lyxhh a lot.
 
-MAAPP support two modles:
-- Modle one:
+MAAPP support two models:
+- Model one:
 Calling decrypt/encrypt/hash functions directly through the burpsuite plugin.
-- Modle two(Recommand):
+- Model two(Recommand):
 Modify the plaintext data of the request before encryption/hash functions.
 
 ## Features
