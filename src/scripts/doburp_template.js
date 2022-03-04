@@ -138,7 +138,8 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
         }
         return retval
     
-    } else if ("void" == ret_type) {
+    } 
+    if ("void" == ret_type) {
         //只可能是修改参数
         // send(uri + " before -> " + JSON.stringify(args) + "-se00nood00tooag-");
         for (var i = 0; i < arg_len; i++) {

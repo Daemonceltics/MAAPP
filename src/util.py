@@ -83,7 +83,7 @@ def on_message(message, data):
                     """
             if "True" == isAndroid:
                 httpout += """
-                    <input onclick="doburp('Android','normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp">
+                    <input onclick="doburp('Android','normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp(AndroidOnly)">
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Generate <span class="caret"></span></button>
@@ -341,8 +341,13 @@ def loadScript(script_content):
         if genv.isAndroid is not None and not genv.isAndroid:
             process_name = genv.allApp[process_name]
 
-        pkg = rdev.get_process(process_name).pid
-        genv.session = rdev.attach(pkg)
+        # pid = rdev.get_process(process_name).pid
+        for i in rdev.enumerate_applications():
+            if i.identifier == process_name:
+                pid = i.pid
+                break;
+        # logger.info("pid:"+str(pid))
+        genv.session = rdev.attach(pid)
         # genv.session = frida.get_usb_device().attach("MyFirstIOS")
         logger.info("create_script")
         logger.info("Hook App: %s" % process_name)
@@ -372,7 +377,7 @@ def loadScript(script_content):
 
             
 
-            logger.info("create_script")
+            logger.info("create_script in Exception case and spawn mode.")
             logger.info("Hook App: %s" % process_name)
             # if genv.script:
             #     genv.script.unload()

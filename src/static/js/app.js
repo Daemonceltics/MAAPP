@@ -203,7 +203,17 @@ function savefileContent(type) {
 
 function loadCustomScript(type) {
     var ScriptContent = Customcode.getValue();
+    if(type == 'spawn'){
+        var appid = document.getElementById('editedidentifier_cus').value
+        if (appid == undefined || appid == ""){
+            alert("App identifier must be set in spawn mode.")
+            return
+        }
+        socket.emit("setpkgname", { pkgnameText: appid });
+    }
     socket.emit("loadCustomScript", { "ScriptContent": ScriptContent, "type": type});
+    
+    
 }
 
 function doburp(type, level) {
@@ -478,8 +488,11 @@ function getcustominfo() {
 
 function selectApp(clicked_id) {
     //alert(clicked_id)
+    if(clicked_id == "magicnum")
+        clicked_id = document.getElementById('editedidentifier').value
     if(clicked_id){
         var pkgnameText_load = { pkgnameText: clicked_id };
+        //set genv packagename
         socket.emit("setpkgname", pkgnameText_load);
     }else{
         alert("Invalid Input, not empty.")

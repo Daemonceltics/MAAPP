@@ -13,14 +13,19 @@ def load_inspect(message):
 
     if InspectTextval is not None:
         pos = InspectTextval.rfind('.')
-        if -1 != pos:
-            # Android
-            className = InspectTextval[:pos]
-            methodNmae = InspectTextval[pos+1:]
-            content = {
-                'clazz_name': className,
-                'method_name': methodNmae
-            }
+         # Android
+        if genv.isAndroid:
+            if -1 != pos:
+                className = InspectTextval[:pos]
+                methodNmae = InspectTextval[pos+1:]
+                content = {
+                    'clazz_name': className,
+                    'method_name': methodNmae
+                }
+            else:
+                content = {
+                    'clazz_name': InspectTextval,
+                }
         else:
             # IOS
             content = {
@@ -287,7 +292,7 @@ def load_custom_script(message):
                 loadToBurpScript(ScriptContent)
             else :
                 loadScript(ScriptContent)
-        elif type == "sleep":
+        elif type == "sleep" or type == "spawn":
             sleep_load_scipt(ScriptContent)
         else:
             logger.error("Only normal and sleep loading scripts are supported")
