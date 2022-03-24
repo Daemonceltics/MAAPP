@@ -1,13 +1,14 @@
 ## Mobile App API Penetration Platform(MAAPP)
 
-MAAPP is an Android/iOS App API penetration tool. Using its penetration tester can improve efficiency because it ignores kinds of protection functions (e.g. encrypt) implemention. Powered by [frida.re](https://www.frida.re), [python3](https://www.python.org)
+MAAPP is an Android/iOS App API penetration tool. Using it penetration tester can improve efficiency because it ignores kinds of protection functions (e.g. encrypt) implemention. Powered by [frida.re](https://www.frida.re), [python3](https://www.python.org)
 Base on https://github.com/lyxhh/lxhToolHTTPDecrypt/, thanks @lyxhh a lot.
 
-MAAPP support two models:
-- Model one:
-Calling decrypt/encrypt/hash functions directly through the burpsuite plugin.
-- Model two(Recommand):
-Modify the plaintext data of the request before encryption/hash functions.
+MAAPP support two modes:
+- Mode one:
+Call decrypt/encrypt/hash functions directly through the burpsuite plugin.
+- Mode two(Recommand):
+Modify plaintext data before eencryption/hash functions processing.
+
 
 ## Features
 * **Cross plarform web GUI!**
@@ -22,18 +23,20 @@ Modify the plaintext data of the request before encryption/hash functions.
 
 
 ## Installation
-$ pip3 install colorlog flask flask_socketio requests frida-tools
+$ pip3 install -r requirements.txt
 
 
 ## Usage
 usage: app.py [-h] [-p FLASKPORT] [-fp FRIDAPORT]  
-$ python3 app.py  
+$ cd src & python3 app.py  
 then open http://localhost:8088  (default) 
 
 Debug custom scripts：
 ```
 send('-debugscript-'+'this is log');
 ```
+## Known issues
+1. Memory address hook not support
 
 ## LICENCE
 MIT
