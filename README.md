@@ -36,7 +36,7 @@ Debug custom scripts：
 send('-debugscript-'+'this is log');
 ```
 ## Known issues
-1. Memory address hook not support
+1. Memory address hook not supported
 
 ## LICENCE
 MIT
