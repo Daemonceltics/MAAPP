@@ -1,4 +1,5 @@
 # - * - coding:utf-8 - * -
+# from asyncio.windows_events import NULL
 from globalenv import socketio, genv
 import frida
 import jinja2
@@ -39,7 +40,6 @@ def load_inspect(message):
 @socketio.on('clear_hookMessage', namespace='/defchishi')
 def clear_hook_message():
     logger.info("ClearMessage")
-
 
 @socketio.on('downloadApp', namespace='/defchishi')
 def download_app():
@@ -455,9 +455,9 @@ def doburp(message):
 
     script_content = ""
     methods_list = message.get('methods_list')
-    doburp_type = message.get('type')
+    # doburp_type = message.get('type')
 
-    if "Android" == doburp_type:
+    if genv.isAndroid:
         for item in methods_list:
             temptime = random.random()
             classname = item.get('classname')
@@ -480,7 +480,7 @@ def doburp(message):
             # print("Android doburp Script:\n" + script_content)
         content = {'scripts': script_content, "iosscript":""}
 
-    elif "IOS" == doburp_type:
+    else :
         for item in methods_list:
             # temptime = random.random()
             classname = item.get('classname')
@@ -532,9 +532,10 @@ def doburp(message):
                 script_content += "\n// Added doburp \n\t"
             # print(script_content)
         content = {'scripts': "", "iosscript":script_content}
-    else:
-        logger.error("GeneratetoBurp Error, Only supports Android and IOS platforms. Please check.")
+    if script_content == "":
+        logger.error("doburp Error, Only supports Android and IOS platforms. Please check.")
         return
+        
     result = render('./scripts/doburp.js', content)
     print('[*]doburp script finally: \n' + result)
     # loadScript(result)
@@ -546,9 +547,8 @@ def doburp(message):
 def generate_to_burp(message):
     script_content = ""
     methods_list = message.get('methods_list')
-    doburp_type = message.get('type')
 
-    if "Android" == doburp_type:
+    if genv.isAndroid:
         for item in methods_list:
             temptime = random.random()
             classname = item.get('classname')
@@ -570,7 +570,7 @@ def generate_to_burp(message):
             # print(script_content)
         content = {'scripts': script_content, "iosscript":""}
 
-    elif "IOS" == doburp_type:
+    else :
         for item in methods_list:
             # temptime = random.random()
             classname = item.get('classname')
@@ -590,7 +590,7 @@ def generate_to_burp(message):
             script_content += "\n// Added doburp \n\t"
             # print(script_content)
         content = {'scripts': "", "iosscript":script_content}
-    else:
+    if script_content == "":
         logger.error("GeneratetoBurp Error, Only supports Android and IOS platforms. Please check.")
         return
     

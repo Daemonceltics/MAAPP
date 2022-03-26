@@ -75,28 +75,28 @@ def on_message(message, data):
 
             httpout += """</select>
                         </div>
-                    <input onclick="addinfo()" class="btn btn-default "  style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="add">
-                    <input onclick="Generate('findhook')" class="btn btn-default " style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="hook">
-                    <input onclick="Generate('rpcExport')" class="btn btn-default " style="width:130px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="export static">
-                    <input onclick="Generate('rpcExportInstance')" class="btn btn-default " style="width:130px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="export instance">
+                    <input onclick="addinfo()" class="btn btn-default "  style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="Add">
+                    <input onclick="Generate('findhook')" class="btn btn-default " style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="Hook">
+                    <input onclick="Generate('rpcExport')" class="btn btn-default " style="width:130px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="Export static">
+                    <input onclick="Generate('rpcExportInstance')" class="btn btn-default " style="width:130px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="Export instance">
                     
                     """
             if "True" == isAndroid:
+                # <input onclick="doburp('normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp(AndroidOnly)">
                 httpout += """
-                    <input onclick="doburp('Android','normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp(AndroidOnly)">
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Generate <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="#" onclick="Generate('GenerateExportStatic')">Generate export static script</a></li>
                           <li><a href="#" onclick="Generate('GenerateExportInstance')">Generate export instance script</a></li>
-                          <li><a href="#" onclick="doburp('Android','update')">Generate toBurp script</a></li>
+                          <li><a href="#" onclick="doburp('update')">Generate toBurp script</a></li>
                         </ul>
                     </div>
                     """
             else:
+                # <input onclick="doburp('normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp">
                 httpout += """
-                    <input onclick="doburp('IOS','normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp">
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Generate <span class="caret"></span></button>
@@ -104,7 +104,7 @@ def on_message(message, data):
                           <li><a href="#" onclick="Generate('GenerateExportStatic')">Generate export static script</a></li>
                           <li><a href="#" onclick="Generate('GenerateExportInstance')">Generate export instance script</a></li>
                           <li><a href="#" onclick="Generate('GenerateExportToburpScript')">Generate export toburp script</a></li>
-                          <li><a href="#" onclick="doburp('IOS','update')">Generate toBurp script</a></li>
+                          <li><a href="#" onclick="doburp('update')">Generate toBurp script</a></li>
                         </ul>
                     </div>
                 """
@@ -271,16 +271,16 @@ def on_message(message, data):
                         {'data': info.replace("networkRequestBacktace", "")},
                         namespace='/defchishi')
         elif "-debugscript-" in info:
-            logger.info(info.replace("-debugscript-", ""))
+            logger.info("Script debug info:" + info.replace("-debugscript-", ""))
         else:
             logger.error("no message!!!!!")
 
     elif message['type'] == 'error':
         if message.get('description') is not None:
             # print(message)
-            logger.error("on_message description is: %s" % message.get('description'))
+            logger.error("Script error description is: %s. lineNumber: %d" % (message.get('description'), message.get('lineNumber')))
         else:
-            logger.error("on_message  No description")
+            logger.error("Script error  no description")
 
 def loadToBurpScript(script_content):
     try:
@@ -289,11 +289,20 @@ def loadToBurpScript(script_content):
         if process_name is None:
             logger.info("Identifier is null, please input.")
             return "no"
-        if genv.isAndroid is not None and not genv.isAndroid:
+        if not genv.isAndroid:
             process_name = genv.allApp[process_name]
-
-        pkg = rdev.get_process(process_name).pid
-        genv.toBurpSession = rdev.attach(pkg)
+        logger.info("pid:"+process_name)
+        pid = 0
+        # pid = rdev.get_process(process_name).pid
+        for i in rdev.enumerate_applications():
+            if i.identifier == process_name:
+                pid = i.pid
+                break;
+        # logger.info("pid:"+str(pid))
+        if pid == 0:
+            pid = rdev.get_process(process_name).pid
+        # logger.info("2pid:"+str(pid))
+        genv.toBurpSession = rdev.attach(pid)
         # genv.session = frida.get_usb_device().attach("MyFirstIOS")
         logger.info("loadToBurpScript")
         logger.info("Hook App: %s" % process_name)
@@ -307,7 +316,7 @@ def loadToBurpScript(script_content):
         logger.error("frida-server No Running ....please check.")
         return "no"
     except Exception as e:
-        logger.error("Script failed to load, Reason is %s, Try restarting the app to continue loading the script. " % e)
+        logger.error("[loadToBurpScript] Script failed to load, Reason is %s, Try restarting the app to continue loading the script. " % e)
         try:
             process_name = genv.get_pkgname()
             if process_name is None:
@@ -338,14 +347,18 @@ def loadScript(script_content):
         if process_name is None:
             logger.info("Identifier is null, please input.")
             return "no"
-        if genv.isAndroid is not None and not genv.isAndroid:
+        if not genv.isAndroid:
             process_name = genv.allApp[process_name]
-
+        logger.info("pid:"+process_name)
+        pid = 0
         # pid = rdev.get_process(process_name).pid
         for i in rdev.enumerate_applications():
             if i.identifier == process_name:
                 pid = i.pid
                 break;
+        # logger.info("pid:"+str(pid))
+        if pid == 0:
+            pid = rdev.get_process(process_name).pid
         # logger.info("pid:"+str(pid))
         genv.session = rdev.attach(pid)
         # genv.session = frida.get_usb_device().attach("MyFirstIOS")
@@ -365,7 +378,7 @@ def loadScript(script_content):
         logger.error("frida-server No Running ....please check.")
         return "no"
     except Exception as e:
-        logger.error("Script failed to load, Reason is %s, Try restarting the app to continue loading the script. " % e)
+        logger.error("[loadScript] Script failed to load, Reason is %s, Try restarting the app to continue loading the script. " % e)
         try:
             process_name = genv.get_pkgname()
             if process_name is None:

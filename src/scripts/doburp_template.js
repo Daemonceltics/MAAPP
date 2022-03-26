@@ -23,7 +23,7 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
     var uri = "(" + ret_type + ")" + "{{ clazz_name }}.{{ method_name }}(" + arg_type + ")";
 
     if (0 != arg_len) {
-        // send(uri + " argument before -> " + JSON.stringify(args) + "-se00nood00tooag-");
+        // send(uri + " argument before -> " + JSON.stringify(args) + "-debugscript-");
         for (var v = 0; v < arg_len; v++) {
 
             if ("object" == typeof args[v] && "org.json.JSONObject" == argumentTypesArr[v]["className"]) {
@@ -46,7 +46,7 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                 //     console.error(error);
                 //     // continue
                 // }
-            } else if ("object" == typeof args[v] && "number" == typeof args[v].length()) { //byte Aarray .length()会报错，没有这个属性
+            } else if ("object" == typeof args[v] ) { //byte Aarray .length()会报错，没有这个属性 && "number" == typeof args[v].length()
 
                 srcargs[v] = JSON.stringify(args[v]);
 
@@ -66,42 +66,54 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
 
     try {
         if ("void" != ret_type) {
+            /*
             retval = this[{{ method_var }}].apply(this, arguments);
             if ("org.json.JSONObject" == ret_type) {
 
-            send(uri + " retval   before -> " + retval.toString() + "-se00nood00tooag-");
+            send(uri + " retval   before -> " + retval.toString() + "-debugscript-");
             sendback["retval"] = retval.toString();
 
             } else if (ret_type == '[B') {
                 const JString = Java.use('java.lang.String');
                 const str = JString.$new(retval);
                 sendback["retval"] = str.toString();
-            } else if ("object" == typeof retval && "number" == typeof retval.length()) {
-                send(uri + " retval   before -> " + JSON.stringify(retval) + "-se00nood00tooag-");
-                sendback["retval"] = JSON.stringify(retval);
+            } else if ("object" == typeof retval ) { 
+                try{
+                    if ("number" == typeof retval.length()){
+                        send(uri + " retval   before -> " + JSON.stringify(retval) + "-debugscript-");
+                        sendback["retval"] = JSON.stringify(retval);
+                    }
+                    else{
+                        send(uri + " retval   before -> " + String(retval) + "-debugscript-");
+                        sendback["retval"] = String(retval);
+                    }
+                }catch(error){
+                    send(uri + " retval   before -> " + String(retval) + "-debugscript-");
+                    sendback["retval"] = String(retval);
+                }
+                
                 // console.log("retval is Array");
-            } else if ("object" == typeof retval) {
-                send(uri + " retval   before -> " + String(retval) + "-se00nood00tooag-");
-                sendback["retval"] = String(retval);
-                // console.log("retval is object");
             } else {
-                send(uri + " retval   before -> " + JSON.stringify(retval) + "-se00nood00tooag-");
+                send(uri + " retval   before -> " + JSON.stringify(retval) + "-debugscript-");
                 sendback["retval"] = retval;
                 // console.log("retval is base type");
-            }
+            }*/
+            retval = undefined;
+            sendback["retval"] = String(retval);
         }else {
             retval = undefined;
             sendback["retval"] = String(retval);
-            // send(uri + " before -> " + String(retval) + "-se00nood00tooag-");
+            // send(uri + " before -> " + String(retval) + "-debugscript-");
         }
-    } catch (err) { retval = null; console.error(error); console.log("Exception - cannot compute retval.." + JSON.stringify(err)) }
+    } catch (err) { retval = null; send('-debugscript-'+"Exception - cannot compute retval.." + JSON.stringify(err)); }
 
     sendback['uri'] = uri;
     send(JSON.stringify(sendback, null, 4) + signature);
 
     var op = recv('input', function (value) {
         recv_data = value.payload;
-        // console.log("revc: " + recv_data);
+        console.log("revc: " + recv_data);
+        send('-debugscript-'+recv_data);
     });
     op.wait();
 
@@ -115,33 +127,42 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
             const JString = Java.use('java.lang.String');
             const str = JString.$new(retval);
             //修改了返回值
-            if (newretval != str.toString()) {
+            if (newretval != eval(str).toString()) {
                 retval = eval(newretval);
             }
-        } else if ("object" == typeof retval && "number" == typeof retval.length()) {
+        } else if ("object" == typeof retval ) { // && "number" == typeof retval.length()
             // console.log("Arg0 return is Array");
-            if (newretval != JSON.stringify(retval)) {
-                retval = eval(newretval);
+            try{
+                if( "number" == typeof retval.length()){
+                    if (newretval != JSON.stringify(retval)) {
+                        retval = eval(newretval);
+                    }
+                    send(uri + " retval   after  -> " + JSON.stringify(retval) + "-debugscript-");
+                } else {
+                    // console.log("Arg0 return is object");
+                    //对象类型不处理,直接返回。
+                    send(uri + " retval   after  -> " + String(retval) + "-debugscript-");
+                    return retval
+                }
+            } catch (error) {
+                // console.log("Arg0 return is object");
+                //对象类型不处理,直接返回。
+                send(uri + " retval   after  -> " + String(retval) + "-debugscript-");
+                return retval
             }
-            send(uri + " retval   after  -> " + JSON.stringify(retval) + "-se00nood00tooag-");
-        } else if ("object" == typeof retval) {
-            // console.log("Arg0 return is object");
-            //对象类型不处理,直接返回。
-            send(uri + " retval   after  -> " + String(retval) + "-se00nood00tooag-");
-            // return retval
         } else {
             // console.log("Arg0 return base type");
             if (newretval != retval) {
                 retval = retval.constructor(newretval);
             }
-            send(uri + " retval   after  -> " + JSON.stringify(retval) + "-se00nood00tooag-");
+            send(uri + " retval   after  -> " + JSON.stringify(retval) + "-debugscript-");
         }
         return retval
     
     } 
-    if ("void" == ret_type) {
+    // if ("void" == ret_type) {
         //只可能是修改参数
-        // send(uri + " before -> " + JSON.stringify(args) + "-se00nood00tooag-");
+        // send(uri + " before -> " + JSON.stringify(args) + "-debugscript-");
         for (var i = 0; i < arg_len; i++) {
             if ("object" == typeof args[i] && "org.json.JSONObject" == argumentTypesArr[i]["className"]) {
 
@@ -153,30 +174,34 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                 const JString = Java.use('java.lang.String');
                 const str = JString.$new(recv_arg[i]);
                 args[i] = eval(str.getBytes());
-            } else if ("object" == typeof args[i] && "number" == typeof args[i].length()) {
-                // console.log("Arg is Array");
-                args[i] = eval(recv_arg[i]);
-            } else if ("object" == typeof args[i]) {
-                // console.log("Arg is object");
-                //对象类型，不处理直接返回
-                continue;
+            } else if ("object" == typeof args[i] ) {
+                try{
+                    if ("number" == typeof args[i].length())
+                        args[i] = eval(recv_arg[i]);
+                    else
+                        //对象类型，不处理直接返回
+                        continue;
+                } catch (error) {
+                    //对象类型，不处理直接返回
+                    continue;
+                }
             } else if ("string" == typeof args[i]) {
                 //continue;
                 a = eval(recv_arg[i]);
                 a['ResultType'] = 0;
-
                 args[i] = a;
             } else {
                 // console.log("Arg is other type");
                 args[i] = args[i].constructor(recv_arg[i]);
             }
         }
-        send(uri + " argument after  -> " + JSON.stringify(args) + "-se00nood00tooag-");
+        send(uri + " argument after  -> " + JSON.stringify(args) + "-debugscript-");
         retval = this[{{ method_var }}].apply(this, args);
         return retval;
+    /*
     } else {
         //有参数且返回值非 void
-        if ("org.json.JSONObject" == ret_type && "number" == typeof retval.length()) {
+        if ("org.json.JSONObject" == ret_type) {
             if (newretval != retval.toString()) {
                 // 修改了返回值       
                 var jsonObject = Java.use("org.json.JSONObject");
@@ -196,10 +221,16 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                         const JString = Java.use('java.lang.String');
                         const str = JString.$new(recv_arg[i]);
                         args[i] = eval(str);
-                    } else if ("object" == typeof args[i] && "number" == typeof args[i].length) {
-                        args[i] = eval(recv_arg[i]);
-                    } else if ("object" == typeof args[i]) {
-                        continue;
+                    } else if ("object" == typeof args[i] ) {
+                        try{
+                            if ("number" == typeof args[i].length)
+                                args[i] = eval(recv_arg[i]);
+                            else
+                                continue;
+                        }catch(error){
+                            continue;
+                        }
+                        
                     } else {
                         args[i] = args[i].constructor(recv_arg[i])
                     }
@@ -211,7 +242,7 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
             const JString = Java.use('java.lang.String');
             const str = JString.$new(retval);
             //修改了返回值
-            if (newretval != str.toString()) {
+            if (newretval != eval(str).toString()) {
                 retval = eval(newretval);
             } else {
                 //修改了参数
@@ -225,13 +256,19 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                         const JString = Java.use('java.lang.String');
                         const str = JString.$new(recv_arg[i]);
                         args[i] = eval(str.getBytes());
-                    } else if ("object" == typeof args[i] && "number" == typeof args[i].length()) {
-                        // console.log("Arg is Array");
-                        args[i] = eval(recv_arg[i]);
-                    } else if ("object" == typeof args[i]) {
-                        // console.log("Arg is object");
-                        //对象类型，不处理直接返回
-                        continue;
+                    } else if ("object" == typeof args[i] ) {
+                        try{
+                            if("number" == typeof args[i].length())
+                                // console.log("Arg is Array");
+                                args[i] = eval(recv_arg[i]);
+                            else
+                                //对象类型，不处理直接返回
+                                continue;
+                        }catch(error){
+                            //对象类型，不处理直接返回
+                            continue;
+                        }
+                        
                     } else if ("string" == typeof args[i]) {
                         //continue;
                         a = eval(recv_arg[i]);
@@ -242,14 +279,70 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                         args[i] = args[i].constructor(recv_arg[i]);
                     }
                 }
-                send(uri + " argument after  -> " + JSON.stringify(args) + "-se00nood00tooag-");
+                send(uri + " argument after  -> " + JSON.stringify(args) + "-debugscript-");
                 retval = this[{{ method_var }}].apply(this, args);
             }
             return retval;
-        } else if ("object" == typeof retval && "number" == typeof retval.length()) {
-            if (newretval != JSON.stringify(retval)) {
-                retval = eval(newretval);
-            } else {
+        } else if ("object" == typeof retval) {
+            try{
+                if ("number" == typeof retval.length()){
+                    if (newretval != JSON.stringify(retval)) {
+                        retval = eval(newretval);
+                    } else {
+                        for (var i = 0; i < arg_len; i++) {
+                            if ("object" == typeof args[i] && "org.json.JSONObject" == argumentTypesArr[i]["className"]) {
+        
+                                var jsonObject = Java.use("org.json.JSONObject");
+                                var argObj = jsonObject.$new(recv_arg[i]);
+                                args[i] = eval(argObj);
+        
+                            } else if (argumentTypesArr[i]["className"] == '[B') {
+                                const JString = Java.use('java.lang.String');
+                                const str = JString.$new(recv_arg[i]);
+                                args[i] = eval(str.getBytes());
+                            } else if ("object" == typeof args[i] && "number" == typeof args[i].length) {
+                                args[i] = eval(recv_arg[i]);
+                            } else if ("object" == typeof args[i]) {
+                                continue;
+                            } else {
+                                args[i] = args[i].constructor(recv_arg[i])
+                            }
+                        }
+                        retval = this[{{ method_var }}].apply(this, args);
+                    }
+                    send(uri + " argument after  -> " + JSON.stringify(args) + "-debugscript-");
+                    send(uri + " retval   after  -> " + JSON.stringify(retval) + "-debugscript-");
+                    return retval;
+                } else {
+                    // send(uri + " before -> " + JSON.stringify(args) + "-debugscript-");
+                    console.log("ObjectTypeReturnValue");
+                    for (var i = 0; i < arg_len; i++) {
+                        if ("object" == typeof args[i] && "org.json.JSONObject" == argumentTypesArr[i]["className"]) {
+
+                            var jsonObject = Java.use("org.json.JSONObject");
+                            var argObj = jsonObject.$new(recv_arg[i]);
+                            args[i] = eval(argObj);
+
+                        } else if (argumentTypesArr[i]["className"] == '[B') {
+                            const JString = Java.use('java.lang.String');
+                            const str = JString.$new(recv_arg[i]);
+                            args[i] = eval(str.getBytes());
+                        } else if ("object" == typeof args[i] && "number" == typeof args[i].length) {
+                            args[i] = eval(recv_arg[i]);
+                        } else if ("object" == typeof args[i]) {
+                            continue;
+                        } else {
+                            args[i] = args[i].constructor(recv_arg[i])
+                        }
+                    }
+                    this[{{ method_var }}].apply(this, args);
+                    send(uri + " argument after  -> " + JSON.stringify(args) + "-debugscript-");
+                    send(uri + " retval   after  -> " + String(retval) + "-debugscript-");
+                    return retval;
+                }
+            }catch (error){
+                // send(uri + " before -> " + JSON.stringify(args) + "-debugscript-");
+                console.log("ObjectTypeReturnValue");
                 for (var i = 0; i < arg_len; i++) {
                     if ("object" == typeof args[i] && "org.json.JSONObject" == argumentTypesArr[i]["className"]) {
 
@@ -269,38 +362,11 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                         args[i] = args[i].constructor(recv_arg[i])
                     }
                 }
-                retval = this[{{ method_var }}].apply(this, args);
-            }
-            send(uri + " argument after  -> " + JSON.stringify(args) + "-se00nood00tooag-");
-            send(uri + " retval   after  -> " + JSON.stringify(retval) + "-se00nood00tooag-");
-            return retval;
-        }else if ("object" == typeof retval) {
-
-            // send(uri + " before -> " + JSON.stringify(args) + "-se00nood00tooag-");
-            console.log("ObjectTypeReturnValue");
-            for (var i = 0; i < arg_len; i++) {
-                if ("object" == typeof args[i] && "org.json.JSONObject" == argumentTypesArr[i]["className"]) {
-
-                    var jsonObject = Java.use("org.json.JSONObject");
-                    var argObj = jsonObject.$new(recv_arg[i]);
-                    args[i] = eval(argObj);
-
-                } else if (argumentTypesArr[i]["className"] == '[B') {
-                    const JString = Java.use('java.lang.String');
-                    const str = JString.$new(recv_arg[i]);
-                    args[i] = eval(str.getBytes());
-                } else if ("object" == typeof args[i] && "number" == typeof args[i].length) {
-                    args[i] = eval(recv_arg[i]);
-                } else if ("object" == typeof args[i]) {
-                    continue;
-                } else {
-                    args[i] = args[i].constructor(recv_arg[i])
-                }
-            }
-            this[{{ method_var }}].apply(this, args);
-            send(uri + " argument after  -> " + JSON.stringify(args) + "-se00nood00tooag-");
-            send(uri + " retval   after  -> " + String(retval) + "-se00nood00tooag-");
-            return retval;
+                this[{{ method_var }}].apply(this, args);
+                send(uri + " argument after  -> " + JSON.stringify(args) + "-debugscript-");
+                send(uri + " retval   after  -> " + String(retval) + "-debugscript-");
+                return retval;
+            } 
         } else {
             // console.log("BaseTypeReturnValue");
             if (newretval != retval) {
@@ -330,10 +396,10 @@ doburp_clazz_Thread = Java.use("java.lang.Thread");
                 }
                 retval = this[{{ method_var }}].apply(this, args);
             }
-            send(uri + " argument after  -> " + JSON.stringify(args) + "-se00nood00tooag-");
-            send(uri + " retval   after  -> " + JSON.stringify(retval) + "-se00nood00tooag-");
+            send(uri + " argument after  -> " + JSON.stringify(args) + "-debugscript-");
+            send(uri + " retval   after  -> " + JSON.stringify(retval) + "-debugscript-");
             console.log("+++" + JSON.stringify(retval) + "+++")
             return retval;
         }
-    }
+    }*/
 };

@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class HDConfigDlg extends JDialog {
     private final JPanel mainPanel = new JPanel();
 
-    private final JLabel lbURL =  new JLabel("HTTPDecrypt WebServer URL:");
+    private final JLabel lbURL =  new JLabel("MAAPP WebServer URL:");
     private final JTextField tfURL = new JTextField(30);
 
     private final JLabel labelResFunc1 = new JLabel("Cus_Req_func 1");
@@ -53,7 +53,7 @@ public class HDConfigDlg extends JDialog {
     public HDConfigDlg(){
         initGUI();
         initEvent();
-        this.setTitle("HTTPDecrypt Config");
+        this.setTitle("MAAPP Config");
     }
 
 

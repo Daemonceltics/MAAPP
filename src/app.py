@@ -103,7 +103,7 @@ def bcall():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.description = 'HTTP Decrypt'
+    parser.description = 'MAAPP'
     parser.add_argument("-p", "--FlaskPort", help="Specify the Flask port , default port is 8088")
     # parser.add_argument("-fp", "--FridaPort", help="Specify the Frida port, default port is 27042")
     parser.add_argument("-fp", "--FridaPort", help="Specify the Frida port, default port is 0")
@@ -113,7 +113,7 @@ def main():
     FlaskPort = 8088 if (args.FlaskPort is None) else args.FlaskPort
     FridaPort = 0 if (args.FridaPort is None) else args.FridaPort
 
-    logger.info("HTTP Decrypt running at http://127.0.0.1:{}".format(FlaskPort))
+    logger.info("MAAPP running at http://127.0.0.1:{}".format(FlaskPort))
     genv.set_device(FridaPort)
     # webbrowser.open("http://127.0.0.1:8088")
     socketio.run(app, host=host, port=FlaskPort, debug=True)

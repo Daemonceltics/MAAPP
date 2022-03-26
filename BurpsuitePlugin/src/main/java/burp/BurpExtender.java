@@ -44,7 +44,7 @@ public class BurpExtender implements IBurpExtender,IContextMenuFactory,ActionLis
 
             List<JMenuItem> listMenuItems = new ArrayList<JMenuItem>();
 
-            JMenuItem jMenuItem = new JMenuItem("Send to HTTPDecrypt");
+            JMenuItem jMenuItem = new JMenuItem("Config MAAPP");
             jMenuItem.setActionCommand("HDSetting");
             jMenuItem.addActionListener(this);
 
@@ -83,7 +83,7 @@ public class BurpExtender implements IBurpExtender,IContextMenuFactory,ActionLis
 
             List<JMenuItem> listMenuItems = new ArrayList<JMenuItem>();
 
-            JMenuItem jMenuItem = new JMenuItem("Send to HTTPDecrypt");
+            JMenuItem jMenuItem = new JMenuItem("Config MAAPP");
             jMenuItem.setActionCommand("HDSetting");
             jMenuItem.addActionListener(this);
 

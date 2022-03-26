@@ -1,7 +1,7 @@
 package burp;
 
 public class Config {
-    private static final String EXTENDER_NAME = "HTTPDecrypt";
+    private static final String EXTENDER_NAME = "MAAPPExtender";
     private static final String EXTENDER_VERSION = "1.0";
     private static boolean IS_BODYAUTO = false;
     private static String WebServerURL= "http://127.0.0.1:8088/";

@@ -216,7 +216,7 @@ function loadCustomScript(type) {
     
 }
 
-function doburp(type, level) {
+function doburp(level) {
     // console.log(type);
     var lists = toBurpinfo.getValue().split('\n');
     lists = uniqBy(lists);
@@ -233,11 +233,11 @@ function doburp(type, level) {
             console.log("doburp is error: " + lists[index])
         }
     }
-    if ("Android" == type) {
-        methods_list["type"] = "Android";
-    }else if ("IOS" == type) {
-        methods_list["type"] = "IOS";
-    }
+    // if ("Android" == type) {
+    //     methods_list["type"] = "Android";
+    // }else if ("IOS" == type) {
+    //     methods_list["type"] = "IOS";
+    // }
 
     if (level == "normal"){
         socket.emit("doburp", methods_list);
@@ -404,7 +404,7 @@ function addToBurpInfo(){
         }
     }
     addIsToBurpInfo(arg_list);
-    doburp('IOS', 'normal');
+    doburp('normal');
 }
 // arg_list           数组，里面包含 json 对象
 // methodNum          要hook第几个方法，第一个传 1
