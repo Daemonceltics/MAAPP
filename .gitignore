@@ -2,3 +2,4 @@ src/__handlers__
 src/__pycache__
 src/log.pyc
 src/.vscode
+BurpsuitePlugin/target
