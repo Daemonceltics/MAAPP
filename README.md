@@ -35,7 +35,7 @@ Extender->Add->Select file->Select BurpsuitePlugin/out/artifacts/HTTPDecryptPlug
 A mobile phone that frida installed connected to the PC
 
 ## Usage
-git clone https://github.com/Daemonceltics/MAAPP 
+$ git clone https://github.com/Daemonceltics/MAAPP 
 $ cd src & python3 app.py  
 web server url is http://localhost:8088  (default) 
 Open another terminal(It's unnecessary if you use mode one)
