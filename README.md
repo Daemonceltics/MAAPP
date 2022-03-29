@@ -29,13 +29,13 @@ Using this tool for penetration testing is not a zero threshold, because whether
 
 
 ## Installation and setup
+$ git clone https://github.com/Daemonceltics/MAAPP 
 $ pip3 install -r requirements.txt    
 Burp install extender:
-Extender->Add->Select file->Select BurpsuitePlugin/out/artifacts/HTTPDecryptPlugin_jar/HTTPDecryptPlugin.jar  
+Extender->Add->Select file->Select HTTPDecryptPlugin.jar  
 A mobile phone that frida installed connect to the PC
 
-## Usage
-$ git clone https://github.com/Daemonceltics/MAAPP  
+## Usage 
 $ cd src & python3 app.py    
 web server url is http://localhost:8088  (default)   
 Open another terminal(It's unnecessary if you use mode one)  
