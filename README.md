@@ -43,7 +43,7 @@ $ cd src & python3 tracer.py
 Set up burpsuite:
 
 ![](docs/images/1.png)
-![](docs/images/2.png)
+![](docs/images/2.png)  
 And make sure no socks proxy be used:
 ![](docs/images/image2021-6-8_18-6-21)
 Open http://localhost:8088 on your browser, click refresh PID button
