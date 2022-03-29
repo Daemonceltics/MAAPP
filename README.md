@@ -9,9 +9,9 @@ Call decrypt/encrypt/hash functions directly through the burpsuite plugin.
 - Mode 2(Recommand):
 Modify plaintext data before eencryption/hash functions processing.
 How does mode 1 work?
-![](docs/images/mode1.png)
+![](docs/images/mode1.jpg)
 How does mode 2 work?
-![](docs/images/maapp.png)
+![](docs/images/maapp.jpg)
 
 ## Note:
 Using this tool for penetration testing is not a zero threshold, because whether you choose mode 1 or mode 2 generally requires some reverse engineering, the workload of reverse engineering depends on the effect of "Trace" in the tool, but is very small compared to traditional methods if needed.
@@ -35,7 +35,7 @@ Extender->Add->Select file->Select BurpsuitePlugin/out/artifacts/HTTPDecryptPlug
 A mobile phone that frida installed connected to the PC
 
 ## Usage
-usage: app.py [-h] [-p FLASKPORT] [-fp FRIDAPORT]  
+git clone https://github.com/Daemonceltics/MAAPP 
 $ cd src & python3 app.py  
 web server url is http://localhost:8088  (default) 
 Open another terminal(It's unnecessary if you use mode one)
@@ -58,7 +58,7 @@ According to ObjC's selector, we can know that the DTRpcOperation class is a par
 ![](docs/images/selectfunc.png)
 Select the target function and click "Add" button to add the function information to "Info", then configure index infomation
 ![](docs/images/configfunc.png)
-"Intercept mode" type 0 and "Keyword" leave it nothing, click "Add/Update Hook Info", your burp will receive the parameters of the function mentioned above, and you can insert a pentesting payload on it
+"Intercept mode" type 0 and "Keyword" leave it blank, click "Add/Update Hook Info", your burp will receive the parameters of the function mentioned above, and you can insert a pentesting payload on it
 ![](docs/images/intercept.png)
 The data in the burp is complete and plaintext if you choose a "good" enough function.
 
