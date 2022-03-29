@@ -14,7 +14,7 @@ How does mode 2 work?
 ![](docs/images/maapp.jpg)
 
 ## Note:
-Using this tool for penetration testing is not a zero threshold, because whether you choose mode 1 or mode 2 generally requires some reverse engineering, the workload of reverse engineering depends on the effect of "Trace" in the tool, but is very small compared to traditional methods if needed.
+Using this tool for penetration testing is not a zero threshold, because whether you choose mode 1 or mode 2 generally requires some reverse engineering, the workload of reverse engineering depends on the effect of "Trace" in the tool, It may not be necessary to open IDA Pro at all, maybe some simple reverse engineering is required.
 
 ## Features
 * **Cross plarform web GUI!**
