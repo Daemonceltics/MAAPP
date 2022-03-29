@@ -32,7 +32,7 @@ Using this tool for penetration testing is not a zero threshold, because whether
 $ git clone https://github.com/Daemonceltics/MAAPP 
 $ pip3 install -r requirements.txt    
 Burp install extender:
-Extender->Add->Select file->Select HTTPDecryptPlugin.jar  
+Extender->Add->Select file->Select BurpPlugin.jar  
 A mobile phone that frida installed connect to the PC
 
 ## Usage 
