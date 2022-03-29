@@ -43,7 +43,7 @@ $ cd src & python3 tracer.py
 Set up burpsuite:
 ![](docs/images/1.png)
 ![](docs/images/2.png)
-and make sure no socks proxy be used:
+And make sure no socks proxy be used:
 ![](docs/images/image2021-6-8_18-6-21)
 Open http://localhost:8088 on your browser, click refresh PID button
 ![](docs/images/refresh.png)
@@ -51,7 +51,7 @@ Select process you will hacked
 ![](docs/images/select.png)
 Then switch to Trace module(Currently only Android is supported) and start trace
 ![](docs/images/trace.png)
-Operate the App to send network requests，If all goes well you will see a result similar to the figure below. It helps you find the entry point for network data processing quickly. Of course we only need to focus on the module name is CFBundleName, 
+Operate the App to send network requests，If all goes well you will see a result similar to the figure below. It helps you find the entry point for network data processing quickly. Of course we only need to focus on the module of CFBundleName
 ![](docs/images/tracestack.png)
 (The AppStore in the picture is not the system App Store, it just happens to have the same name)
 According to ObjC's selector, we can know that the DTRpcOperation class is a part of the network communication data processing, so we can try to instrument the relevant class as the key function to forward data to burp. So switch toBurp menu, input DTRpcOperation and click the "Confim" button
