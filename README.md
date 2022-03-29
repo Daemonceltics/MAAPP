@@ -7,7 +7,7 @@ MAAPP support two modes:
 - Mode 1:
 Call decrypt/encrypt/hash functions directly through the burpsuite plugin.
 - Mode 2(Recommand):
-Modify plaintext data before eencryption/hash functions processing.
+Modify plaintext data before eencryption/hash functions processing.  
 How does mode 1 work?
 ![](docs/images/mode1.jpg)
 How does mode 2 work?
@@ -29,17 +29,17 @@ Using this tool for penetration testing is not a zero threshold, because whether
 
 
 ## Installation and setup
-$ pip3 install -r requirements.txt
+$ pip3 install -r requirements.txt    
 Burp install extender:
-Extender->Add->Select file->Select BurpsuitePlugin/out/artifacts/HTTPDecryptPlugin_jar/HTTPDecryptPlugin.jar
-A mobile phone that frida installed connected to the PC
+Extender->Add->Select file->Select BurpsuitePlugin/out/artifacts/HTTPDecryptPlugin_jar/HTTPDecryptPlugin.jar  
+A mobile phone that frida installed connect to the PC
 
 ## Usage
-$ git clone https://github.com/Daemonceltics/MAAPP 
-$ cd src & python3 app.py  
-web server url is http://localhost:8088  (default) 
-Open another terminal(It's unnecessary if you use mode one)
-$ cd src & python3 tracer.py
+$ git clone https://github.com/Daemonceltics/MAAPP  
+$ cd src & python3 app.py    
+web server url is http://localhost:8088  (default)   
+Open another terminal(It's unnecessary if you use mode one)  
+$ cd src & python3 tracer.py  
 Set up burpsuite:
 ![](docs/images/1.png)
 ![](docs/images/2.png)
