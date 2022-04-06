@@ -39,6 +39,7 @@ setImmediate(function() {
                 inspect_sendback['methodname'] = "{{ method_name }}";
 
                 var class_hook = Java.use(clazz_name);
+                // var methods = Java.enumerateMethods(clazz_name + '!*')
                 var overloadz_class_hook = eval("class_hook[method_name].overloads");
                 var ovl_count_class_hook = overloadz_class_hook.length;
                 //console.log(ovl_count_class_hook);

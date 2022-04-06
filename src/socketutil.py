@@ -223,8 +223,10 @@ def unload_to_burp_script():
 @socketio.on('setpkgname', namespace='/defchishi')
 def set_package_name(message):
     pkgname = message.get('pkgnameText')
+    sleeptime = message.get('sleeptime')
     logger.info("setPackageName: %s" % pkgname)
-
+    logger.info("setSleepTime: %s" % sleeptime)
+    genv.set_spawnsleep(sleeptime)
     genv.set_pkgname(pkgname)
     pkgarr = {'result': pkgname}
     get_application()
@@ -292,8 +294,8 @@ def load_custom_script(message):
                 loadToBurpScript(ScriptContent)
             else :
                 loadScript(ScriptContent)
-        elif type == "sleep" or type == "spawn":
-            sleep_load_scipt(ScriptContent)
+        elif type == "spawn":
+            spawn_load_scipt(ScriptContent)
         else:
             logger.error("Only normal and sleep loading scripts are supported")
     except Exception as e:

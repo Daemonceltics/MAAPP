@@ -17,21 +17,19 @@ How does mode 2 work?
 Using this tool for penetration testing is not a zero threshold, because whether you choose mode 1 or mode 2 generally requires some reverse engineering, the workload of reverse engineering depends on the effect of "Trace" in the tool, It may not be necessary to open IDA Pro at all, maybe some simple reverse engineering is required.
 
 ## Features
-* **Cross plarform web GUI!**
-* Hook all methods with the given class.
-* Find all methods with the given class.
-* Print stack information 
-* Finds the method based on the given string
-* Print all modules(import and export and symbols,RegisterNative)
-* UIDump(Monitor Activity,Action...)
-* Custom Script
-* Print network request stack infomation. 
-
+- Cross plarform web GUI
+- Hook all methods with the given class and print stack information
+- Find all methods with the given class
+- Find or hook the method based on the given string
+- Hook any Java/ObjC methods 
+- Print iOS app http(s) network request stack infomation
+- Native functions can be called in burp to process request data
+- Redirect network request data to burp, and support arbitrary modification
 
 ## Installation and setup
-$ git clone https://github.com/Daemonceltics/MAAPP 
+$ git clone https://github.com/Daemonceltics/MAAPP  
 $ pip3 install -r requirements.txt    
-Burp install extender:
+Burp install extender(Only for mode 1):
 Extender->Add->Select file->Select BurpPlugin.jar  
 A mobile phone that frida installed connect to the PC
 
@@ -59,7 +57,7 @@ According to ObjC's selector, we can know that the DTRpcOperation class is a par
 ![](docs/images/selectfunc.png)
 Select the target function and click "Add" button to add the function information to "Info", then configure index infomation
 ![](docs/images/configfunc.png)
-"Intercept mode" type 0 and "Keyword" leave it blank, click "Add/Update Hook Info", your burp will receive the parameters of the function mentioned above, and you can insert a pentesting payload on it
+"Select mode" select 0 and "Keyword" leave it blank, click "Add/Update Hook Info", your burp will receive the parameters of the function mentioned above, and you can insert a pentesting payload on it
 ![](docs/images/intercept.png)
 The data in the burp is complete and plaintext if you choose a "good" enough function.
 

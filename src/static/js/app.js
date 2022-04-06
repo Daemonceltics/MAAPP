@@ -205,11 +205,25 @@ function loadCustomScript(type) {
     var ScriptContent = Customcode.getValue();
     if(type == 'spawn'){
         var appid = document.getElementById('editedidentifier_cus').value
+        var sleepsec = document.getElementById('editsleep_cus').value
+        if (sleepsec == undefined || sleepsec == ""){
+            sleepsec = 0
+        }
+        try {
+            var sleeptime = Number(sleepsec)
+        } catch (error) {
+            alert("Sleep input must be number.")
+            return
+        }
+        // if (typeof sleepsec != 'number'){
+        //     alert("Sleep input must be number.")
+        //     return
+        // }
         if (appid == undefined || appid == ""){
             alert("App identifier must be set in spawn mode.")
             return
         }
-        socket.emit("setpkgname", { pkgnameText: appid });
+        socket.emit("setpkgname", { pkgnameText: appid, sleeptime: sleeptime });
     }
     socket.emit("loadCustomScript", { "ScriptContent": ScriptContent, "type": type});
     

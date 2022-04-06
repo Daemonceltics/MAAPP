@@ -1,13 +1,14 @@
 <p id="toggle_custom_info" class="text-primary" style="cursor: pointer; margin-bottom: 3px;display: inline-block;">Custom <i class="glyphicon glyphicon-resize-small"></i></p>&nbsp;&nbsp;
 <div class="btn-group" role="group" aria-label="...">
-                <div class="btn-group" role="group">
+    <button type="button" onclick="loadCustomScript('normal')" class="btn btn-default btn-xs " aria-haspopup="true" aria-expanded="false">loadScript </button>
+                <!-- <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 loadScript <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                           <li><a href="#" onclick="loadCustomScript('normal')">loadScript</a></li>
                           <li><a href="#" onclick="loadCustomScript('sleep')">loadScript(SleepResumeApp)</a></li>
                         </ul>
-                    </div>
+                </div> -->
     <button type="button" data-toggle="modal" data-target="#ScriptManage" id="CustomScriptManage" onclick="getcustominfo();" class="btn btn-default btn-xs">ScriptManage</button>
     <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#SaveScript" >SaveScript</button>
     <button type="button" data-toggle="modal" data-target="#SpawnLoadScript" class="btn btn-default btn-xs" >SpawnLoadScript</button>
@@ -83,6 +84,7 @@
             <div class="modal-body">
                 <p>Are you set identifier in home tab? if not set here:</p>
                 <input type="text" id="editedidentifier_cus" class="form-group" placeholder="PackageName/Identifier(IOS)">
+                <input type="number" id="editsleep_cus" class="form-group" placeholder="sleep x ms if need">
                 <!-- <code id="deletefilename" style="word-wrap:break-word"></code> -->
             </div>
             <div class="modal-footer">

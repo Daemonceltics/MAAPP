@@ -18,6 +18,13 @@ class Globalenv(object):
         self.port = 0
         self.isAndroid = None
         self.allApp = {}
+        self.spawnsleep = 0
+
+    def set_spawnsleep(self, time):
+        self.spawnsleep = time
+
+    def get_spawnsleep(self):
+        return self.spawnsleep
 
     def set_pkgname(self, pkg):
         self.packagename = pkg

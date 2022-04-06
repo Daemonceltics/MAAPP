@@ -11,6 +11,7 @@ import cgi
 import html
 from os.path import dirname, abspath
 import os
+import time
 BURP_HOST = "localhost"
 BURP_PORT = 26000
 
@@ -401,7 +402,7 @@ def loadScript(script_content):
             genv.script.on("message", on_message)  # on()方法注册message handler
             genv.script.load()
         except Exception as e:
-            logger.error("The script failed to load again, Reason is %s." % e)
+            logger.error("The script failed to load again, Reason is: %s." % e)
             return "no"
 
 def sleep_load_scipt(script_content):
@@ -412,6 +413,8 @@ def sleep_load_scipt(script_content):
             logger.info("Identifier is null, please input.")
             return "no"
         pkg = rdev.spawn([process_name])
+        rdev.resume(pkg)
+        time.sleep(genv.get_spawnsleep()/1000)
         genv.session = rdev.attach(pkg)
         genv.toBurpSession = rdev.attach(pkg)
         
@@ -423,10 +426,35 @@ def sleep_load_scipt(script_content):
         logger.info("script_on...")
         genv.script.on("message", on_message)  # on()方法注册message handler
         genv.script.load()
-        rdev.resume(pkg)
+        
     except Exception as e:
-        logger.error("The script failed to load again, Reason is %s." % e)
+        logger.error("The script sleep failed to load again, Reason is: %s." % e)
 
+def spawn_load_scipt(script_content):
+    if genv.get_spawnsleep() != 0:
+        sleep_load_scipt(script_content)
+    else:
+        try:
+            rdev = genv.get_device()
+            process_name = genv.get_pkgname()
+            if process_name is None:
+                logger.info("Identifier is null, please input.")
+                return "no"
+            pkg = rdev.spawn([process_name])
+            genv.session = rdev.attach(pkg)
+            genv.toBurpSession = rdev.attach(pkg)
+            
+            logger.info("spawn resume app...")
+            logger.info("Hook App: %s" % process_name)
+
+            genv.script = genv.session.create_script(script_content)
+
+            logger.info("script_on...")
+            genv.script.on("message", on_message)  # on()方法注册message handler
+            genv.script.load()
+            rdev.resume(pkg)
+        except Exception as e:
+            logger.error("The script spawn failed to load again, Reason is: %s." % e)
 
 def isAndroid(device):
     for app in device.enumerate_processes():
