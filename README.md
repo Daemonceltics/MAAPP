@@ -63,11 +63,11 @@ The data in the burp is complete and plaintext if you choose a "good" enough fun
 
 
 ## Known issues
-1. Memory address hook not supported
-2. Android platform has fewer parameter types, usage and testing than iOS platform, and the code may not be robust enough. Supported types of function parameters:
+1. Memory address hooking is not supported
+2. Android platform has fewer parameter types, usage and testing than iOS platform, and the code may not be robust enough. Supported types of function parameters are:
 ```
-Android:String org.json.JSONObject byte[]
-iOS:NSString NSDictionary NSData NSURL 
+Android:String, org.json.JSONObject, byte[]
+iOS:NSString, NSDictionary, NSData, NSURL 
 ```
 3. Repeater and Intruder features in burp are not supported
 
