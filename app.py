@@ -47,7 +47,7 @@ def hello():
 
     return render_template("index.html", header=header_html, home=home_html, hook=hook_html, stack=stack_html,
                            find=find_html, uidump=uidump_html, toBurp=toBurp_html, custom=custom_html,
-                           decoder=decoder_html, trace=trace_html, hackbyx=hackbyx_html)
+                           decoder=decoder_html, trace=trace_html)
 
 
 @app.route('/call', methods=['POST'])
