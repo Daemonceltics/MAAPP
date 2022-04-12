@@ -3,8 +3,7 @@
 import frida
 from flask import Flask
 from flask_socketio import SocketIO
-from log import logger
-
+from .log import logger
 
 class Globalenv(object):
     def __init__(self):

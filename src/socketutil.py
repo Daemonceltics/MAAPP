@@ -1,9 +1,9 @@
 # - * - coding:utf-8 - * -
 # from asyncio.windows_events import NULL
-from globalenv import socketio, genv
+from .globalenv import socketio, genv
 import frida
 import jinja2
-from util import *
+from .util import *
 import os
 import random
 
@@ -32,7 +32,7 @@ def load_inspect(message):
             content = {
                 'clazz_name': InspectTextval,
             }
-        script_content = render('./scripts/inspect.js', content)
+        script_content = render('./src/scripts/inspect.js', content)
         # print(script_content)
         loadScript(script_content)
 
@@ -48,7 +48,7 @@ def download_app():
         'pkgname': genv.get_pkgname(),
         'flagSecure': 0
     }
-    script_content = render('./scripts/index.js', content)
+    script_content = render('./src/scripts/index.js', content)
     try:
         getattr(genv.script.exports, "downloadapp")()
     except Exception as e:
@@ -66,7 +66,7 @@ def screenshot(message):
         'pkgname': genv.get_pkgname(),
         'flagSecure': flag
     }
-    script_content = render('./scripts/index.js', content)
+    script_content = render('./src/scripts/index.js', content)
     # print(script_content)
     try:
         getattr(genv.script.exports, "screenshot")()
@@ -81,7 +81,7 @@ def screenshot(message):
 def load_ui_script():
     logger.info("load ui script...")
     content = {}
-    script_content = render('./scripts/ui.js', content)
+    script_content = render('./src/scripts/ui.js', content)
     # print(script_content)
     loadScript(script_content)
 
@@ -95,7 +95,7 @@ def query_ui(message):
         'pkgname': genv.get_pkgname(),
         'flagSecure': 0
     }
-    script_content = render('./scripts/index.js', content)
+    script_content = render('./src/scripts/index.js', content)
     try:
         logger.info("query action.")
         getattr(genv.script.exports, "queryuiaction")(ptr)
@@ -110,7 +110,7 @@ def query_ui(message):
             getattr(genv.script.exports, "queryuicontrol")(ptr)
     # print(type(ptr), ptr)
     # content = {}
-    # script_content = render('./scripts/ui.js', content)
+    # script_content = render('./src/scripts/ui.js', content)
     # print(script_content)
     # loadScript(script_content)
 
@@ -121,7 +121,7 @@ def ios_ui_dump():
         'pkgname': genv.get_pkgname(),
         'flagSecure': 0
     }
-    script_content = render('./scripts/index.js', content)
+    script_content = render('./src/scripts/index.js', content)
     try:
         getattr(genv.script.exports, "uidump")()
     except Exception as e:
@@ -137,7 +137,7 @@ def startTrace():
         'pkgname': genv.get_pkgname(),
         'flagSecure': 0
     }
-    script_content = render('./scripts/frida_backtrace.js', content)
+    script_content = render('./src/scripts/frida_backtrace.js', content)
     try:
         loadScript(script_content)
     except Exception as e:
@@ -156,7 +156,7 @@ def export_all_moudle():
                 'flagSecure': 0
                 # 'type': "EnumExportNative"
                }
-    script_content = render('./scripts/index.js', content)
+    script_content = render('./src/scripts/index.js', content)
     # print(script_content)
     flag = loadScript(script_content)
     if flag != "no":
@@ -173,7 +173,7 @@ def enumerate_moudle_by_name(message):
         'flagSecure': 0
         # 'type': "EnumExportNative"
     }
-    script_content = render('./scripts/index.js', content)
+    script_content = render('./src/scripts/index.js', content)
     try:
         if "enumerateExports" == type:
             getattr(genv.script.exports, "enumerateexports")(modulename)
@@ -183,7 +183,7 @@ def enumerate_moudle_by_name(message):
             getattr(genv.script.exports, "enumeratesymbols")(modulename)
         elif "enumerateRegisterNatives" == type:
             if genv.isAndroid is not None and genv.isAndroid:
-                content = render('./scripts/enumerateNativeMethods.js', content)
+                content = render('./src/scripts/enumerateNativeMethods.js', content)
                 sleep_load_scipt(content)
             else:
                 logger.warning("enumerateRegisterNatives Only supports Android.")
@@ -198,7 +198,7 @@ def enumerate_moudle_by_name(message):
             elif "enumerateSymbols" == type:
                 getattr(genv.script.exports, "enumeratesymbols")(modulename)
             elif "enumerateRegisterNatives" == type:
-                content = render('./scripts/enumerateNativeMethods.js', content)
+                content = render('./src/scripts/enumerateNativeMethods.js', content)
                 sleep_load_scipt(content)
 
 
@@ -477,7 +477,7 @@ def doburp(message):
                 'index': index,
             }
             # print("Android doburp clazz_var: " + str(context['clazz_var']))
-            script_content += render('./scripts/doburp_template.js', context)
+            script_content += render('./src/scripts/doburp_template.js', context)
             script_content += "\n// Added doburp \n\t"
             # print("Android doburp Script:\n" + script_content)
         content = {'scripts': script_content, "iosscript":""}
@@ -506,18 +506,18 @@ def doburp(message):
                     'inputStr': inputStr,
                 }
                 if modeNum == '0' or modeNum == '2':
-                    script_content += render('./scripts/toburp_iostemplate.js', context)
+                    script_content += render('./src/scripts/toburp_iostemplate.js', context)
                     script_content += "\n// Added doburp \n\t"
-                    script_content += render('./scripts/toburp_iosChangeRetvalTemplate.js', context)
+                    script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate.js', context)
                     script_content += "\n// Added doburp \n\t"
                 elif modeNum == '1' :
-                    script_content += render('./scripts/toburp_iosChangeRetvalTemplate_returnValue.js', context)
+                    script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate_returnValue.js', context)
                     script_content += "\n// Added doburp \n\t"
                 elif modeNum == '3':
-                    script_content += render('./scripts/toburp_iostemplate_onestep.js', context)
+                    script_content += render('./src/scripts/toburp_iostemplate_onestep.js', context)
                     script_content += "\n// Added doburp \n\t"
                 elif modeNum == '4':
-                    script_content += render('./scripts/toburp_iostemplate_twostep.js', context)
+                    script_content += render('./src/scripts/toburp_iostemplate_twostep.js', context)
                     script_content += "\n// Added doburp \n\t"
                 else :                    
                     logger.error("modeNum Error, Only supports change arg and return value. Please check.")
@@ -528,9 +528,9 @@ def doburp(message):
                     'methodtag': methodtag,
                     'method_name': methodname,
                 }
-                script_content += render('./scripts/doburp_iostemplate.js', context)
+                script_content += render('./src/scripts/doburp_iostemplate.js', context)
                 script_content += "\n// Added doburp \n\t"
-                script_content += render('./scripts/doburp_iosChangeRetvalTemplate.js', context)
+                script_content += render('./src/scripts/doburp_iosChangeRetvalTemplate.js', context)
                 script_content += "\n// Added doburp \n\t"
             # print(script_content)
         content = {'scripts': "", "iosscript":script_content}
@@ -538,8 +538,8 @@ def doburp(message):
         logger.error("doburp Error, Only supports Android and IOS platforms. Please check.")
         return
         
-    result = render('./scripts/doburp.js', content)
-    print('[*]doburp script finally: \n' + result)
+    result = render('./src/scripts/doburp.js', content)
+    # print('[*]doburp script finally: \n' + result)
     # loadScript(result)
     unload_to_burp_script()
     loadToBurpScript(result)
@@ -567,7 +567,7 @@ def generate_to_burp(message):
                 'index_var': "index" + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'index': index,
             }
-            script_content += render('./scripts/doburp_template.js', context)
+            script_content += render('./src/scripts/doburp_template.js', context)
             script_content += "\n// Added doburp \n\t"
             # print(script_content)
         content = {'scripts': script_content, "iosscript":""}
@@ -586,9 +586,9 @@ def generate_to_burp(message):
                 'methodtag': methodtag,
                 'method_name': methodname,
             }
-            script_content += render('./scripts/doburp_iostemplate.js', context)
+            script_content += render('./src/scripts/doburp_iostemplate.js', context)
             script_content += "\n// Added doburp \n\t"
-            script_content += render('./scripts/doburp_iosChangeRetvalTemplate.js', context)
+            script_content += render('./src/scripts/doburp_iosChangeRetvalTemplate.js', context)
             script_content += "\n// Added doburp \n\t"
             # print(script_content)
         content = {'scripts': "", "iosscript":script_content}
@@ -596,7 +596,7 @@ def generate_to_burp(message):
         logger.error("GeneratetoBurp Error, Only supports Android and IOS platforms. Please check.")
         return
     
-    result = render('./scripts/doburp.js', content)
+    result = render('./src/scripts/doburp.js', content)
     # print(result)
     socketio.emit('OutputGenerateExportScript', {"filecontent": result}, namespace='/defchishi')
     logger.info("GenerateToBurpScript done, result in Custom Tag.")
@@ -640,7 +640,7 @@ def export_rpc_instance(message):
                 'clazz_var': classname + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'args': args
             }
-            iosscript_content += render('./scripts/Export_iosTemplate_Instance.js', context)
+            iosscript_content += render('./src/scripts/Export_iosTemplate_Instance.js', context)
             iosscript_content += "\n// Added Hook \n\t"
         else:
             classname = item.get('classname')
@@ -660,11 +660,11 @@ def export_rpc_instance(message):
                 'method_name': methodname,
                 'args': args
             }
-            script_content += render('./scripts/Export_Template_Instance.js', context)
+            script_content += render('./src/scripts/Export_Template_Instance.js', context)
             script_content += "\n// Added Function \n\t"
     # print(script_content)
     content = {'scripts': script_content, 'iosscript': iosscript_content}
-    result = render('./scripts/Export.js', content)
+    result = render('./src/scripts/Export.js', content)
     # print(result)
     loadScript(result)
 
@@ -696,18 +696,18 @@ def GenerateTobutpScript(message):
                 'inputStr': inputStr,
             }
             if modeNum == '0' or modeNum == '2':
-                script_content += render('./scripts/toburp_iostemplate.js', context)
+                script_content += render('./src/scripts/toburp_iostemplate.js', context)
                 script_content += "\n// Added doburp \n\t"
-                script_content += render('./scripts/toburp_iosChangeRetvalTemplate.js', context)                    
+                script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate.js', context)                    
                 script_content += "\n// Added doburp \n\t"
             elif modeNum == '1' :
-                script_content += render('./scripts/toburp_iosChangeRetvalTemplate_returnValue.js', context)
+                script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate_returnValue.js', context)
                 script_content += "\n// Added doburp \n\t"
             elif modeNum == '3':
-                script_content += render('./scripts/toburp_iostemplate_onestep.js', context)
+                script_content += render('./src/scripts/toburp_iostemplate_onestep.js', context)
                 script_content += "\n// Added doburp \n\t"
             elif modeNum == '4':
-                script_content += render('./scripts/toburp_iostemplate_twostep.js', context)
+                script_content += render('./src/scripts/toburp_iostemplate_twostep.js', context)
                 script_content += "\n// Added doburp \n\t"
             else :                    
                 logger.error("modeNum Error, Only supports change arg and return value. Please check.")
@@ -718,14 +718,14 @@ def GenerateTobutpScript(message):
                 'methodtag': methodtag,
                 'method_name': methodname,
             }
-            script_content += render('./scripts/doburp_iostemplate.js', context)
+            script_content += render('./src/scripts/doburp_iostemplate.js', context)
             script_content += "\n// Added doburp \n\t"
-            script_content += render('./scripts/doburp_iosChangeRetvalTemplate.js', context)
+            script_content += render('./src/scripts/doburp_iosChangeRetvalTemplate.js', context)
             script_content += "\n// Added doburp \n\t"
         # print(script_content)
     content = {'scripts': "", "iosscript":script_content}
 
-    result = render('./scripts/doburp.js', content)
+    result = render('./src/scripts/doburp.js', content)
 
     # unload_to_burp_script()
     # loadToBurpScript(result)
@@ -762,7 +762,7 @@ def export_rpc_static(message):
                 'clazz_var': classname + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'args': args
             }
-            iosscript_content += render('./scripts/Export_iosTemplate.js', context)
+            iosscript_content += render('./src/scripts/Export_iosTemplate.js', context)
             iosscript_content += "\n// Added Hook \n\t"
         elif "Android" == platform:
             classname = item.get('classname')
@@ -782,14 +782,14 @@ def export_rpc_static(message):
                 'method_name': methodname,
                 'args': args
             }
-            script_content += render('./scripts/Export_Template.js', context)
+            script_content += render('./src/scripts/Export_Template.js', context)
             script_content += "\n// Added Function \n\t"
         else:
             logger.error("exportrpc Error, Only supports Android and ios platforms. Please check")
             return
     # print(script_content)
     content = {'scripts': script_content, 'iosscript': iosscript_content}
-    result = render('./scripts/Export.js', content)
+    result = render('./src/scripts/Export.js', content)
     # print(result)
     loadScript(result)
 
@@ -826,7 +826,7 @@ def generate_export_instance(message):
                 'clazz_var': classname + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'args': args
             }
-            iosscript_content += render('./scripts/Export_iosTemplate_Instance.js', context)
+            iosscript_content += render('./src/scripts/Export_iosTemplate_Instance.js', context)
             iosscript_content += "\n// Added Hook \n"
 
         elif "Android" == platform:
@@ -847,7 +847,7 @@ def generate_export_instance(message):
                 'method_name': methodname,
                 'args': args
             }
-            script_content += render('./scripts/Export_Template_Instance.js', context)
+            script_content += render('./src/scripts/Export_Template_Instance.js', context)
             script_content += "\n// Added Function \n"
 
         else:
@@ -855,7 +855,7 @@ def generate_export_instance(message):
             return
     # print(script_content)
     content = {'scripts': script_content, 'iosscript': iosscript_content}
-    result = render('./scripts/Export.js', content)
+    result = render('./src/scripts/Export.js', content)
     socketio.emit('OutputGenerateExportScript', {"filecontent": result}, namespace='/defchishi')
     logger.info("GenerateExportScript done, result in Custom Tag.")
     # print(result)
@@ -891,7 +891,7 @@ def generate_export_static(message):
                 'clazz_var': classname + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'args': args
             }
-            iosscript_content += render('./scripts/Export_iosTemplate.js', context)
+            iosscript_content += render('./src/scripts/Export_iosTemplate.js', context)
             iosscript_content += "\n// Added Hook \n"
         elif "Android" == platform:
             classname = item.get('classname')
@@ -911,13 +911,13 @@ def generate_export_static(message):
                 'method_name': methodname,
                 'args': args
             }
-            script_content += render('./scripts/Export_Template.js', context)
+            script_content += render('./src/scripts/Export_Template.js', context)
             script_content += "\n// Added Function \n"
         else:
             logger.error("exportrpc Error, Only supports Android and ios platforms. Please check")
             return
     content = {'scripts': script_content, 'iosscript': iosscript_content}
-    result = render('./scripts/Export.js', content)
+    result = render('./src/scripts/Export.js', content)
 
     socketio.emit('OutputGenerateExportScript', {"filecontent": result}, namespace='/defchishi')
     logger.info("GenerateExportStaticScript done, result in Custom Tag.")
@@ -945,7 +945,7 @@ def find_hook(message):
                 'method_name': methodname,
                 'methodtag': methodtag
             }
-            iosscript_content += render('./scripts/findhook_iostemplate.js', context)
+            iosscript_content += render('./src/scripts/findhook_iostemplate.js', context)
             iosscript_content += "\n// Added Hook \n"
         elif "Android" == platform:
             # for item in methods_list:
@@ -965,13 +965,13 @@ def find_hook(message):
                 'index': index,
                 'methodtag': methodtag
             }
-            script_content += render('./scripts/findhook_template.js', context)
+            script_content += render('./src/scripts/findhook_template.js', context)
             script_content += "\n// Added Hook \n"
         else:
             logger.error("findhook Error, Only supports Android and ios platforms. Please check")
         # print(script_content)
     content = {'scripts': script_content, 'iosscript': iosscript_content}
-    result = render('./scripts/findhook.js', content)
+    result = render('./src/scripts/findhook.js', content)
     # print(result)
     loadScript(result)
 
@@ -1018,7 +1018,7 @@ def do_load_hook(message):
     #         'hookslist': matchtext,
     #         'options': options,
     #     }
-    script_content = render('./scripts/hooks.js', content)
+    script_content = render('./src/scripts/hooks.js', content)
     # print(script_content)
     loadScript(script_content)
 
@@ -1054,14 +1054,14 @@ def do_find_class(message):
                     'find_list': matchfindtext,
                     'options': options,
                    }
-        script_content = render('./scripts/findmethods.js', content)
+        script_content = render('./src/scripts/findmethods.js', content)
     elif "findclass" == type:
         logger.info("FindMatch: %s, Options: %s" % (matchfindtext, options))
         content = {
             'matchfindtext': matchfindtext,
             'options': options,
         }
-        script_content = render('./scripts/finds.js', content)
+        script_content = render('./src/scripts/finds.js', content)
     else:
         logger.error("find type Error")
         return

@@ -1,12 +1,12 @@
 # - * - coding:utf-8 - * -
-from globalenv import socketio, genv
+from .globalenv import socketio, genv
 import json
 import requests
 import hashlib
 import time
 import frida
 import subprocess
-from log import logger
+from .log import logger
 import cgi
 import html
 from os.path import dirname, abspath
