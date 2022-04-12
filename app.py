@@ -45,9 +45,6 @@ def hello():
     with open('./src/templates/trace.html', encoding='utf-8') as f:
         trace_html = f.read()
 
-    with open('./src/templates/hackbyx.html', encoding='utf-8') as f:
-        hackbyx_html = f.read()
-
     return render_template("index.html", header=header_html, home=home_html, hook=hook_html, stack=stack_html,
                            find=find_html, uidump=uidump_html, toBurp=toBurp_html, custom=custom_html,
                            decoder=decoder_html, trace=trace_html, hackbyx=hackbyx_html)
