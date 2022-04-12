@@ -34,10 +34,10 @@ Extender->Add->Select file->Select BurpPlugin.jar
 A mobile phone that frida installed connect to the PC
 
 ## Usage 
-$ cd src & python3 app.py    
+$ python3 app.py    
 web server url is http://localhost:8088  (default)   
 Open another terminal(It's unnecessary if you use mode one)  
-$ cd src & python3 tracer.py  
+$ python3 tracer.py  
 Set up burpsuite:
 
 ![](docs/images/1.png)
