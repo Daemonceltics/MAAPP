@@ -58,9 +58,14 @@ According to ObjC's selector, we can know that the DTRpcOperation class is a par
 Select the target function and click "Add" button to add the function information to "Info", then configure index infomation
 ![](docs/images/configfunc.png)
 "Select mode" select 0 and "Keyword" leave it blank, click "Add/Update Hook Info", your burp will receive the parameters of the function mentioned above, and you can insert a pentesting payload on it
+### About mode
+| Mode | Intercept function args | Intercept function return |  keyword matching function args |  keyword matching function return value| 
+| -------- | --------   | -------- | -------- | -------- |
+| 0         |   ✅     | ❌     |  ✅       |  ❌    |
+| 1         | ❌       |  ✅     | ❌       | ✅     |
+| 2         |  ✅      | ✅     |     ✅      |   ❌    |
 ![](docs/images/intercept.png)
 The data in the burp is complete and plaintext if you choose a "good" enough function.
-
 
 ## Known issues
 1. Memory address hooking is not supported
