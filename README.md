@@ -64,6 +64,7 @@ Select the target function and click "Add" button to add the function informatio
 | 0         |   ✅     | ❌     |  ✅       |  ❌    |
 | 1         | ❌       |  ✅     | ❌       | ✅     |
 | 2         |  ✅      | ✅     |     ✅      |   ❌    |
+
 ![](docs/images/intercept.png)
 The data in the burp is complete and plaintext if you choose a "good" enough function.
 
