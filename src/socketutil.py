@@ -452,9 +452,7 @@ def get_custom_info():
 
 
 @socketio.on('doburp', namespace='/defchishi')
-def doburp(message):
-
-
+def doburp(message): 
     script_content = ""
     methods_list = message.get('methods_list')
     # doburp_type = message.get('type')
@@ -670,65 +668,90 @@ def export_rpc_instance(message):
 
 @socketio.on('GenerateExportToburpScript', namespace='/defchishi')
 def GenerateTobutpScript(message):
-
     script_content = ""
     methods_list = message.get('methods_list')
-    for item in methods_list:
-        # temptime = random.random()
-        classname = item.get('classname')
-        methodname = item.get('methodname')
-        # index = item.get('index')
-        methodtag = item.get('methodtag')
-        # print(type(index))
+    # doburp_type = message.get('type')
 
-        if 'argNum' in item :
-
-            argNum = item.get('argNum')
-            modeNum = item.get('modeNum')
-            inputStr = item.get('inputStr')
+    if genv.isAndroid:
+        for item in methods_list:
+            temptime = random.random()
+            classname = item.get('classname')
+            methodname = item.get('methodname')
+            index = item.get('index')
+            methodtag = item.get('methodtag')
+            # print(type(index))
 
             context = {
+                'clazz_var': classname.replace('.', '')+ hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'clazz_name': classname,
-                'methodtag': methodtag,
+                'method_var': methodtag + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
                 'method_name': methodname,
-                'argNum': argNum,
-                'modeNum': modeNum,
-                'inputStr': inputStr,
+                'index_var': "index" + hashlib.md5(str(temptime).encode(encoding='UTF-8')).hexdigest(),
+                'index': index,
             }
-            if modeNum == '0' or modeNum == '2':
-                script_content += render('./src/scripts/toburp_iostemplate.js', context)
-                script_content += "\n// Added doburp \n\t"
-                script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate.js', context)                    
-                script_content += "\n// Added doburp \n\t"
-            elif modeNum == '1' :
-                script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate_returnValue.js', context)
-                script_content += "\n// Added doburp \n\t"
-            elif modeNum == '3':
-                script_content += render('./src/scripts/toburp_iostemplate_onestep.js', context)
-                script_content += "\n// Added doburp \n\t"
-            elif modeNum == '4':
-                script_content += render('./src/scripts/toburp_iostemplate_twostep.js', context)
-                script_content += "\n// Added doburp \n\t"
-            else :                    
-                logger.error("modeNum Error, Only supports change arg and return value. Please check.")
-            
-        else :
-            context = {
-                'clazz_name': classname,
-                'methodtag': methodtag,
-                'method_name': methodname,
-            }
-            script_content += render('./src/scripts/doburp_iostemplate.js', context)
+            # print("Android doburp clazz_var: " + str(context['clazz_var']))
+            script_content += render('./src/scripts/doburp_template.js', context)
             script_content += "\n// Added doburp \n\t"
-            script_content += render('./src/scripts/doburp_iosChangeRetvalTemplate.js', context)
-            script_content += "\n// Added doburp \n\t"
-        # print(script_content)
-    content = {'scripts': "", "iosscript":script_content}
+            # print("Android doburp Script:\n" + script_content)
+        content = {'scripts': script_content, "iosscript":""}
 
+    else :
+        for item in methods_list:
+            # temptime = random.random()
+            classname = item.get('classname')
+            methodname = item.get('methodname')
+            # index = item.get('index')
+            methodtag = item.get('methodtag')
+            # print(type(index))
+
+            if 'argNum' in item :
+
+                argNum = item.get('argNum')
+                modeNum = item.get('modeNum')
+                inputStr = item.get('inputStr')
+
+                context = {
+                    'clazz_name': classname,
+                    'methodtag': methodtag,
+                    'method_name': methodname,
+                    'argNum': argNum,
+                    'modeNum': modeNum,
+                    'inputStr': inputStr,
+                }
+                if modeNum == '0' or modeNum == '2':
+                    script_content += render('./src/scripts/toburp_iostemplate.js', context)
+                    script_content += "\n// Added doburp \n\t"
+                    script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate.js', context)
+                    script_content += "\n// Added doburp \n\t"
+                elif modeNum == '1' :
+                    script_content += render('./src/scripts/toburp_iosChangeRetvalTemplate_returnValue.js', context)
+                    script_content += "\n// Added doburp \n\t"
+                elif modeNum == '3':
+                    script_content += render('./src/scripts/toburp_iostemplate_onestep.js', context)
+                    script_content += "\n// Added doburp \n\t"
+                elif modeNum == '4':
+                    script_content += render('./src/scripts/toburp_iostemplate_twostep.js', context)
+                    script_content += "\n// Added doburp \n\t"
+                else :                    
+                    logger.error("modeNum Error, Only supports change arg and return value. Please check.")
+                
+            else :
+                context = {
+                    'clazz_name': classname,
+                    'methodtag': methodtag,
+                    'method_name': methodname,
+                }
+                script_content += render('./src/scripts/doburp_iostemplate.js', context)
+                script_content += "\n// Added doburp \n\t"
+                script_content += render('./src/scripts/doburp_iosChangeRetvalTemplate.js', context)
+                script_content += "\n// Added doburp \n\t"
+            # print(script_content)
+        content = {'scripts': "", "iosscript":script_content}
+    if script_content == "":
+        logger.error("doburp Error, Only supports Android and IOS platforms. Please check.")
+        return
+        
     result = render('./src/scripts/doburp.js', content)
-
-    # unload_to_burp_script()
-    # loadToBurpScript(result)
     socketio.emit('OutputGenerateExportToburpScript', {"filecontent": result}, namespace='/defchishi')
     logger.info("OutputGenerateExportToburpScript done, result in Custom Tag.")
 

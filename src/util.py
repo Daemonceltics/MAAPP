@@ -91,12 +91,13 @@ def on_message(message, data):
                         <ul class="dropdown-menu">
                           <li><a href="#" onclick="Generate('GenerateExportStatic')">Generate export static script</a></li>
                           <li><a href="#" onclick="Generate('GenerateExportInstance')">Generate export instance script</a></li>
-                          <li><a href="#" onclick="doburp('update')">Generate toBurp script</a></li>
+                          <li><a href="#" onclick="Generate('GenerateExportToburpScript')">Generate export toburp script</a></li>
                         </ul>
                     </div>
                     """
             else:
                 # <input onclick="doburp('normal')" class="btn btn-default" style="width: 90px;height: 32px; margin-bottom: 2px;margin-top: 2px;" value="toBurp">
+                # <li><a href="#" onclick="doburp('update')">Generate toBurp script</a></li>
                 httpout += """
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -105,7 +106,6 @@ def on_message(message, data):
                           <li><a href="#" onclick="Generate('GenerateExportStatic')">Generate export static script</a></li>
                           <li><a href="#" onclick="Generate('GenerateExportInstance')">Generate export instance script</a></li>
                           <li><a href="#" onclick="Generate('GenerateExportToburpScript')">Generate export toburp script</a></li>
-                          <li><a href="#" onclick="doburp('update')">Generate toBurp script</a></li>
                         </ul>
                     </div>
                 """
