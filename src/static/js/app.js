@@ -280,6 +280,36 @@ function Generate(type) {
     if (type == "GenerateExportStatic") {
         socket.emit("GenerateExportStatic", methods_list);
     } else if (type == "GenerateExportToburpScript") { 
+        var j = 0;
+        var arg_list = new Array();
+        for (let i = 1; i < 13; i=i+4) {
+            if(document.getElementById("d" + i).value != "") {
+                if(document.getElementById("d"+i).value=='' || document.getElementById("d"+(i+1)).value=='' || document.getElementById("d"+(i+2)).value== '') {
+                    alert("update hook info error: \n" + "the argument can not be null!");
+                    return;
+                }
+                arg_list[j]={'methodNum':document.getElementById("d"+i).value, 'argNum': document.getElementById("d"+(i+1)).value, 'modeNum':document.getElementById("d"+(i+2)).value, 'inputStr':(document.getElementById("d"+(i+3)).value?document.getElementById("d"+(i+3)).value:"")};
+                j++;
+            } else {
+                break;
+            }
+        }
+        addIsToBurpInfo(arg_list);
+        var lists = toBurpinfo.getValue().split('\n');
+        lists = uniqBy(lists);
+
+        var methods_list = { methods_list: [] };
+        for (var index = 0; index < lists.length; index++) {
+            try {
+                if ("" == lists[index]){
+                    continue;
+                }
+                var temp = JSON.parse(lists[index]);
+                methods_list.methods_list.push(temp)
+            } catch (e) {
+                console.log("doburp is error: " + lists[index])
+            }
+        }
         socket.emit("GenerateExportToburpScript", methods_list);
     } else if (type == "findhook"){
         socket.emit("findhook", methods_list);
@@ -427,9 +457,6 @@ function addToBurpInfo(){
 // inputStr           要判断的字符串
 // 仅兼容 iOS 平台
 function addIsToBurpInfo(arg_list) {
-
-    
-
     for (let i = 0; i < arg_list.length; i++) {
         const arg_json = arg_list[i];
 
