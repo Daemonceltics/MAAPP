@@ -76,6 +76,10 @@ Android:String, org.json.JSONObject, byte[]
 iOS:NSString, NSDictionary, NSData, NSURL 
 ```
 3. Repeater and Intruder features in burp are not supported
+4. WARNING in __init__: WebSocket transport not available. Install gevent-websocket for improved performance. 
+```
+pip install eventlet
+```
 
 ## LICENCE
 MIT
