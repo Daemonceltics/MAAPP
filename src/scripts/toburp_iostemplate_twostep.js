@@ -9,7 +9,7 @@ var {{ methodtag }}_args = {};
 
 var requestToBurpYesOrNo_twostep = false;
 
-var {{ methodtag }}_isToBurpArgNum = {{argNum}}+1;
+var {{ methodtag }}_isToBurpArgNum = {{argNum}}+2;
 var {{ methodtag }}_modeNum = {{modeNum}};
 var {{ methodtag }}_inputStr = '{{inputStr}}';
 var {{ methodtag }}_isToBurpArgDataClass = false;

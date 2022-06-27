@@ -8,7 +8,7 @@ var {{ methodtag }}_sendback = {};
 var {{ methodtag }}_args = {};
 
 
-var {{ methodtag }}_isToBurpArgNum = {{argNum}}+1;
+var {{ methodtag }}_isToBurpArgNum = {{argNum}}+2;
 var {{ methodtag }}_modeNum = {{modeNum}};
 var {{ methodtag }}_inputStr = '{{inputStr}}';
 
