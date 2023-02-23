@@ -18,7 +18,7 @@ Interceptor.attach({{ methodtag }}.implementation, {
         if(0 == argCount){
             this.argTypes = "(";
         }
-
+        /*
         for (var i = 0; i < argCount; i++) {
             
             if (isObjC(args[i+2])) {
@@ -26,7 +26,7 @@ Interceptor.attach({{ methodtag }}.implementation, {
             }else{
                 this.argTypes += (i == 0) ? {{ methodtag }}_argumentTypes[i+2]: "," + {{ methodtag }}_argumentTypes[i+2];
             }
-        }
+        }*/
         this.argTypes += ")";
         // this.{{ methodtag }}_sendback['stack'] = Thread.backtrace(this.context, Backtracer.ACCURATE).map(DebugSymbol.fromAddress).reverse().join("--->");
         // send('enter 返回 方法');
